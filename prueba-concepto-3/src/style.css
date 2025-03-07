@@ -19,6 +19,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -26,7 +27,6 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -37,10 +37,11 @@ h1 {
 }
 
 #app {
-  max-width: 1280px;
+  max-width: 650px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 2rem 2rem;
   text-align: center;
+  width: 100%;
 }
 
 .logo {
@@ -49,9 +50,11 @@ h1 {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vanilla:hover {
   filter: drop-shadow(0 0 2em #3178c6aa);
 }
@@ -75,12 +78,48 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 2rem 0;
+  cursor: pointer;
+}
+
+.cards__item {
+  aspect-ratio: 1/1;
+  background-color: aliceblue;
+  border-radius: 0.5rem;
+  position: relative;
+  transition: all 0.6s;
+}
+
+.cards__item.is-selected {
+  transform: rotateY(180deg);
+}
+
+.cards__item img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  transition-delay: 0.3s;
+  left: 0;
+}
+
+.cards__item.is-selected img {
+  opacity: 1;
 }
 
 @media (prefers-color-scheme: light) {
@@ -88,9 +127,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
