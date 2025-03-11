@@ -1,12 +1,20 @@
 import { Carta, tablero } from "./modelo";
-import { iniciaPartida, esPartidaCompleta } from "./motor";
+import { sePuedeVoltearLaCarta, voltearLaCarta } from "./motor";
+
+const mensaje = document.querySelector(".mensaje");
+
+const establecerMensaje = (texto: string): void => {
+	if (mensaje && mensaje instanceof HTMLParagraphElement) {
+		mensaje.innerHTML = texto;
+	}
+};
 
 const obtenerIdCarta = (elemento: HTMLDivElement) => {
 	const result = Number(elemento.getAttribute("data-indice-array"));
 	return result;
 };
 
-const generarUiTablero = (
+export const generarDivsTablero = (
 	listado: Carta[],
 	contenedor: HTMLDivElement
 ): void => {
@@ -27,18 +35,17 @@ const generarUiTablero = (
 
 const accionesClickCarta = (elemento: HTMLDivElement) => {
 	let idCarta = obtenerIdCarta(elemento);
-	console.log(idCarta);
-	esPartidaCompleta(tablero);
-};
-
-const mainDiv = document.querySelector(".cards");
-const btnIniciar = document.querySelector(".btn-iniciar");
-
-if (btnIniciar && btnIniciar instanceof HTMLButtonElement) {
-	btnIniciar.addEventListener("click", () => {
-		iniciaPartida(tablero);
-		if (mainDiv && mainDiv instanceof HTMLDivElement) {
-			generarUiTablero(tablero.cartas, mainDiv);
+	let sePuedeVoltear = sePuedeVoltearLaCarta(tablero, idCarta);
+	if (sePuedeVoltear) {
+		voltearLaCarta(tablero, idCarta);
+		const img = elemento.querySelector("img");
+		if (img && img instanceof HTMLImageElement) {
+			img.src = tablero.cartas[idCarta].imagen;
+			elemento.classList.add("is-selected");
 		}
-	});
-}
+	} else {
+		console.log("ups");
+		establecerMensaje("No puedes voltear esa carta");
+	}
+	console.log(tablero.cartas);
+};

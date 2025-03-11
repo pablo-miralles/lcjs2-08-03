@@ -18,33 +18,24 @@ const barajarCartas = (cartas: Carta[]): Carta[] => {
 /*
 Una carta se puede voltear si no está encontrada y no está ya volteada, o no hay dos cartas ya volteadas
 */
-const sePuedeVoltearLaCarta = (tablero: Tablero, indice: number): boolean => {
+export const sePuedeVoltearLaCarta = (
+	tablero: Tablero,
+	indice: number
+): boolean => {
 	const carta = tablero.cartas[indice];
 
-	if (!carta.encontrada && !carta.estaVuelta) {
+	if (
+		(!carta.encontrada && !carta.estaVuelta) ||
+		(tablero.indiceCartaVolteadaA === undefined &&
+			tablero.indiceCartaVolteadaB === undefined)
+	) {
 		return true;
-	}
-
-	const numeroCartasVolteadas = tablero.cartas.reduce(
-		(accumulator, carta) => {
-			carta.estaVuelta
-				? accumulator.cartasVolteadas++
-				: accumulator.cartasVolteadas;
-			return accumulator;
-		},
-		{
-			cartasVolteadas: 0,
-		}
-	);
-
-	if (numeroCartasVolteadas.cartasVolteadas >= 2) {
-		return false;
 	} else {
-		return true;
+		return false;
 	}
 };
 
-const voltearLaCarta = (tablero: Tablero, indice: number): void => {
+export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
 	const item = tablero.cartas[indice];
 	if (!item.estaVuelta) {
 		item.estaVuelta = true;
@@ -71,7 +62,7 @@ export const sonPareja = (
 /*
 Aquí asumimos ya que son pareja, lo que hacemos es marcarlas como encontradas y comprobar si la partida esta completa.
 */
-const parejaEncontrada = (
+export const parejaEncontrada = (
 	tablero: Tablero,
 	indiceA: number,
 	indiceB: number
@@ -95,7 +86,7 @@ const parejaEncontrada = (
 /*
 Aquí asumimos que no son pareja y las volvemos a poner boca abajo
 */
-const parejaNoEncontrada = (
+export const parejaNoEncontrada = (
 	tablero: Tablero,
 	indiceA: number,
 	indiceB: number
@@ -119,8 +110,12 @@ Iniciar partida
 */
 
 export const iniciaPartida = (tablero: Tablero): void => {
-	tablero.cartas = cartas;
+	tablero.cartas.forEach((carta) => {
+		carta.estaVuelta = false;
+		carta.encontrada = false;
+	});
+	tablero.cartas = barajarCartas(cartas);
 	tablero.estadoPartida = "CeroCartasLevantadas";
-	tablero.indiceCartaVolteadaA;
-	barajarCartas(tablero.cartas);
+	tablero.indiceCartaVolteadaA = undefined;
+	tablero.indiceCartaVolteadaB = undefined;
 };
