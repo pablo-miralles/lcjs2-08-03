@@ -1,4 +1,4 @@
-import { Carta, cartas, Tablero } from "./modelo";
+import { Carta, Tablero } from "./modelo";
 
 /*
 En el motor nos va a hacer falta un método para barajar cartas
@@ -25,12 +25,13 @@ export const sePuedeVoltearLaCarta = (
 	const carta = tablero.cartas[indice];
 
 	if (
-		(!carta.encontrada && !carta.estaVuelta) ||
-		tablero.estadoPartida !== "DosCartasLevantadas"
+		(carta.encontrada && carta.estaVuelta) ||
+		carta.estaVuelta ||
+		tablero.estadoPartida === "DosCartasLevantadas"
 	) {
-		return true;
-	} else {
 		return false;
+	} else {
+		return true;
 	}
 };
 
@@ -109,7 +110,7 @@ export const iniciaPartida = (tablero: Tablero): void => {
 		carta.estaVuelta = false;
 		carta.encontrada = false;
 	});
-	tablero.cartas = barajarCartas(cartas);
+	tablero.cartas = barajarCartas(tablero.cartas);
 	tablero.estadoPartida = "CeroCartasLevantadas";
 	tablero.indiceCartaVolteadaA = undefined;
 	tablero.indiceCartaVolteadaB = undefined;

@@ -8,12 +8,12 @@ import {
 	ocultarCartasErroneas,
 } from "./ui";
 import {
-	iniciaPartida,
 	sePuedeVoltearLaCarta,
 	voltearLaCarta,
 	sonPareja,
 	parejaEncontrada,
 	parejaNoEncontrada,
+	iniciaPartida,
 	establecerCartaAOB,
 	prepararTableroParaSiguienteJugada,
 } from "./motor";
@@ -31,60 +31,79 @@ if (btnIniciar && btnIniciar instanceof HTMLButtonElement) {
 }
 
 document.addEventListener("click", (e) => {
-	console.log(tablero);
-	const elemento = e.target;
-	if (
-		elemento &&
-		elemento instanceof HTMLDivElement &&
-		elemento.classList.contains("cards__item")
-	) {
+	console.log("=============================");
+	console.log("ANTES DE HACER CLICK");
+	console.log("=============================");
+	console.log({
+		Cartas: tablero.cartas,
+		EstadoPartida: tablero.estadoPartida,
+		"Carta A": tablero.indiceCartaVolteadaA,
+		"Carta B": tablero.indiceCartaVolteadaB,
+	});
+	const elemento = (e.target as HTMLElement).closest(".cards__item");
+	if (elemento && elemento instanceof HTMLDivElement) {
 		let idCarta = obtenerIdCarta(elemento);
 		const sePuedeVoltear = sePuedeVoltearLaCarta(tablero, idCarta);
+		console.log("sepuedevoltear", sePuedeVoltear);
 		if (sePuedeVoltear) {
 			voltearLaCarta(tablero, idCarta);
 			mostrarImagenCarta(elemento, idCarta);
-			tablero.cartas[idCarta].estaVuelta = true;
 			establecerCartaAOB(tablero, idCarta);
-
+			const tableroCartaA = tablero.indiceCartaVolteadaA;
+			const tableroCartaB = tablero.indiceCartaVolteadaB;
 			if (tablero.estadoPartida === "DosCartasLevantadas") {
-				const indiceA = tablero.indiceCartaVolteadaA;
-				const indiceB = tablero.indiceCartaVolteadaB;
-
 				if (
-					indiceA !== undefined &&
-					indiceA !== null &&
-					indiceB !== undefined &&
-					indiceB !== null
+					tableroCartaA !== undefined &&
+					tableroCartaB !== undefined
 				) {
 					const sonLasCartasPareja = sonPareja(
 						tablero,
-						indiceA,
-						indiceB
+						tableroCartaA,
+						tableroCartaB
 					);
 					if (sonLasCartasPareja) {
-						parejaEncontrada(tablero, indiceA, indiceB);
+						parejaEncontrada(tablero, tableroCartaA, tableroCartaB);
 					} else {
-						parejaNoEncontrada(tablero, indiceA, indiceB);
+						parejaNoEncontrada(
+							tablero,
+							tableroCartaA,
+							tableroCartaB
+						);
 						if (mainDiv && mainDiv instanceof HTMLDivElement) {
-							mainDiv.setAttribute(
-								"style",
-								"pointer-events:none"
-							);
 							setTimeout(() => {
 								ocultarCartasErroneas(mainDiv);
-								mainDiv.removeAttribute("style");
-								prepararTableroParaSiguienteJugada(tablero);
 							}, 1000);
 						}
 					}
-					setTimeout(() => {
-						prepararTableroParaSiguienteJugada(tablero);
-					}, 1000);
+					if (mainDiv && mainDiv instanceof HTMLDivElement) {
+						mainDiv.setAttribute("style", "pointer-events:none");
+						setTimeout(() => {
+							prepararTableroParaSiguienteJugada(tablero);
+							mainDiv.removeAttribute("style");
+							console.log("=============================");
+							console.log("TRAS UN SEGUNDO");
+							console.log("=============================");
+							console.log({
+								Cartas: tablero.cartas,
+								EstadoPartida: tablero.estadoPartida,
+								"Carta A": tablero.indiceCartaVolteadaA,
+								"Carta B": tablero.indiceCartaVolteadaB,
+							});
+						}, 1000);
+					}
 				}
 			}
 		} else {
-			establecerMensaje("No puedes voltear esa carta");
-			alert("No puedes voltear esa carta");
+			establecerMensaje("No puedes pulsar esta carta de nuevo");
 		}
 	}
+	console.log("=============================");
+	console.log("DESPUES DE HACER CLICK");
+	console.log("=============================");
+	console.log({
+		Cartas: tablero.cartas,
+		EstadoPartida: tablero.estadoPartida,
+		"Carta A": tablero.indiceCartaVolteadaA,
+		"Carta B": tablero.indiceCartaVolteadaB,
+	});
 });

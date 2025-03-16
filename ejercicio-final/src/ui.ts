@@ -3,8 +3,11 @@ import { tablero, Carta } from "./modelo";
 const mensaje = document.querySelector(".mensaje");
 
 export const establecerMensaje = (texto: string): void => {
-	if (mensaje && mensaje instanceof HTMLParagraphElement) {
+	if (mensaje && mensaje instanceof HTMLDivElement) {
 		mensaje.innerHTML = texto;
+		setTimeout(() => {
+			mensaje.innerHTML = "";
+		}, 2000);
 	}
 };
 

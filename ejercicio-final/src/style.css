@@ -121,6 +121,11 @@ button:focus-visible {
   opacity: 1;
 }
 
+.mensaje {
+  margin: 1rem 0;
+  color: red;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
