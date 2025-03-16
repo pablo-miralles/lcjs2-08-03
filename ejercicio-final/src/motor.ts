@@ -69,11 +69,10 @@ export const parejaEncontrada = (
 ): void => {
 	const itemA = tablero.cartas[indiceA];
 	const itemB = tablero.cartas[indiceB];
-	const todasLasCartasEstanEncontradas: boolean = esPartidaCompleta(tablero);
-
 	itemA.encontrada = true;
 	itemB.encontrada = true;
 
+	const todasLasCartasEstanEncontradas: boolean = esPartidaCompleta(tablero);
 	if (todasLasCartasEstanEncontradas) {
 		tablero.estadoPartida = "PartidaCompleta";
 	}
@@ -112,6 +111,7 @@ export const iniciaPartida = (tablero: Tablero): void => {
 	});
 	tablero.cartas = barajarCartas(tablero.cartas);
 	tablero.estadoPartida = "CeroCartasLevantadas";
+	tablero.numeroIntentos = 0;
 	tablero.indiceCartaVolteadaA = undefined;
 	tablero.indiceCartaVolteadaB = undefined;
 };
@@ -134,7 +134,9 @@ export const establecerCartaAOB = (tablero: Tablero, idCarta: number): void => {
 };
 
 export const prepararTableroParaSiguienteJugada = (tablero: Tablero): void => {
-	tablero.estadoPartida = "CeroCartasLevantadas";
+	if (!esPartidaCompleta(tablero)) {
+		tablero.estadoPartida = "CeroCartasLevantadas";
+	}
 	tablero.indiceCartaVolteadaA = undefined;
 	tablero.indiceCartaVolteadaB = undefined;
 };

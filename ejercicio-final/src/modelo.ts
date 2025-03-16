@@ -63,6 +63,7 @@ type EstadoPartida =
 export interface Tablero {
 	cartas: Carta[];
 	estadoPartida: EstadoPartida;
+	numeroIntentos: number;
 	indiceCartaVolteadaA?: number;
 	indiceCartaVolteadaB?: number;
 }
@@ -70,6 +71,7 @@ export interface Tablero {
 const crearTableroInicial = (): Tablero => ({
 	cartas: cartas,
 	estadoPartida: "PartidaNoIniciada",
+	numeroIntentos: 0,
 });
 
 export let tablero: Tablero = crearTableroInicial();

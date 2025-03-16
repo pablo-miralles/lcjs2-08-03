@@ -1,8 +1,8 @@
 import { tablero, Carta } from "./modelo";
 
-const mensaje = document.querySelector(".mensaje");
-
 export const establecerMensaje = (texto: string): void => {
+	const mensaje = document.querySelector(".mensaje");
+
 	if (mensaje && mensaje instanceof HTMLDivElement) {
 		mensaje.innerHTML = texto;
 		setTimeout(() => {
@@ -59,4 +59,12 @@ export const ocultarCartasErroneas = (div: HTMLDivElement): void => {
 			}
 		}
 	});
+};
+
+export const updateNumeroIntentos = (): void => {
+	const numeroIntentos = document.querySelector(".numero-de-intentos span");
+
+	if (numeroIntentos && numeroIntentos instanceof HTMLSpanElement) {
+		numeroIntentos.innerHTML = tablero.numeroIntentos.toString();
+	}
 };

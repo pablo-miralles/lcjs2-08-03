@@ -130,6 +130,15 @@ button:focus-visible {
   color: red;
 }
 
+.numero-de-intentos {
+  background-color: limegreen;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.875rem;
+  padding: 1rem;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

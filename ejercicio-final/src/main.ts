@@ -6,6 +6,7 @@ import {
 	generarDivsTablero,
 	mostrarImagenCarta,
 	ocultarCartasErroneas,
+	updateNumeroIntentos,
 } from "./ui";
 import {
 	sePuedeVoltearLaCarta,
@@ -23,10 +24,11 @@ const btnIniciar = document.querySelector(".btn-iniciar");
 
 if (btnIniciar && btnIniciar instanceof HTMLButtonElement) {
 	btnIniciar.addEventListener("click", () => {
+		iniciaPartida(tablero);
 		if (mainDiv && mainDiv instanceof HTMLDivElement) {
-			iniciaPartida(tablero);
 			generarDivsTablero(tablero.cartas, mainDiv);
 		}
+		updateNumeroIntentos();
 	});
 }
 
@@ -37,6 +39,7 @@ document.addEventListener("click", (e) => {
 	console.log({
 		Cartas: tablero.cartas,
 		EstadoPartida: tablero.estadoPartida,
+		NumeroIntentos: tablero.numeroIntentos,
 		"Carta A": tablero.indiceCartaVolteadaA,
 		"Carta B": tablero.indiceCartaVolteadaB,
 	});
@@ -86,12 +89,15 @@ document.addEventListener("click", (e) => {
 							console.log({
 								Cartas: tablero.cartas,
 								EstadoPartida: tablero.estadoPartida,
+								NumeroIntentos: tablero.numeroIntentos,
 								"Carta A": tablero.indiceCartaVolteadaA,
 								"Carta B": tablero.indiceCartaVolteadaB,
 							});
 						}, 1000);
 					}
 				}
+				tablero.numeroIntentos += 1;
+				updateNumeroIntentos();
 			}
 		} else {
 			establecerMensaje("No puedes pulsar esta carta de nuevo");
@@ -103,6 +109,7 @@ document.addEventListener("click", (e) => {
 	console.log({
 		Cartas: tablero.cartas,
 		EstadoPartida: tablero.estadoPartida,
+		NumeroIntentos: tablero.numeroIntentos,
 		"Carta A": tablero.indiceCartaVolteadaA,
 		"Carta B": tablero.indiceCartaVolteadaB,
 	});
