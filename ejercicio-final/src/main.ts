@@ -1,7 +1,22 @@
 import "./style.css";
 import { tablero } from "./modelo";
-import { establecerMensaje, obtenerIdCarta, generarDivsTablero } from "./ui";
-import { iniciaPartida, sePuedeVoltearLaCarta, voltearLaCarta } from "./motor";
+import {
+	establecerMensaje,
+	obtenerIdCarta,
+	generarDivsTablero,
+	mostrarImagenCarta,
+	ocultarCartasErroneas,
+} from "./ui";
+import {
+	iniciaPartida,
+	sePuedeVoltearLaCarta,
+	voltearLaCarta,
+	sonPareja,
+	parejaEncontrada,
+	parejaNoEncontrada,
+	establecerCartaAOB,
+	prepararTableroParaSiguienteJugada,
+} from "./motor";
 
 const mainDiv = document.querySelector(".cards");
 const btnIniciar = document.querySelector(".btn-iniciar");
@@ -16,6 +31,7 @@ if (btnIniciar && btnIniciar instanceof HTMLButtonElement) {
 }
 
 document.addEventListener("click", (e) => {
+	console.log(tablero);
 	const elemento = e.target;
 	if (
 		elemento &&
@@ -23,18 +39,52 @@ document.addEventListener("click", (e) => {
 		elemento.classList.contains("cards__item")
 	) {
 		let idCarta = obtenerIdCarta(elemento);
-		let sePuedeVoltear = sePuedeVoltearLaCarta(tablero, idCarta);
+		const sePuedeVoltear = sePuedeVoltearLaCarta(tablero, idCarta);
 		if (sePuedeVoltear) {
 			voltearLaCarta(tablero, idCarta);
-			const img = elemento.querySelector("img");
-			if (img && img instanceof HTMLImageElement) {
-				img.src = tablero.cartas[idCarta].imagen;
-				elemento.classList.add("is-selected");
+			mostrarImagenCarta(elemento, idCarta);
+			tablero.cartas[idCarta].estaVuelta = true;
+			establecerCartaAOB(tablero, idCarta);
+
+			if (tablero.estadoPartida === "DosCartasLevantadas") {
+				const indiceA = tablero.indiceCartaVolteadaA;
+				const indiceB = tablero.indiceCartaVolteadaB;
+
+				if (
+					indiceA !== undefined &&
+					indiceA !== null &&
+					indiceB !== undefined &&
+					indiceB !== null
+				) {
+					const sonLasCartasPareja = sonPareja(
+						tablero,
+						indiceA,
+						indiceB
+					);
+					if (sonLasCartasPareja) {
+						parejaEncontrada(tablero, indiceA, indiceB);
+					} else {
+						parejaNoEncontrada(tablero, indiceA, indiceB);
+						if (mainDiv && mainDiv instanceof HTMLDivElement) {
+							mainDiv.setAttribute(
+								"style",
+								"pointer-events:none"
+							);
+							setTimeout(() => {
+								ocultarCartasErroneas(mainDiv);
+								mainDiv.removeAttribute("style");
+								prepararTableroParaSiguienteJugada(tablero);
+							}, 1000);
+						}
+					}
+					setTimeout(() => {
+						prepararTableroParaSiguienteJugada(tablero);
+					}, 1000);
+				}
 			}
 		} else {
-			console.log("ups");
 			establecerMensaje("No puedes voltear esa carta");
+			alert("No puedes voltear esa carta");
 		}
-		console.log(tablero.cartas);
 	}
 });

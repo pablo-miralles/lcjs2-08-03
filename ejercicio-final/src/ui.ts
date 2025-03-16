@@ -1,4 +1,4 @@
-import { Carta } from "./modelo";
+import { tablero, Carta } from "./modelo";
 
 const mensaje = document.querySelector(".mensaje");
 
@@ -27,4 +27,33 @@ export const generarDivsTablero = (
 		div.appendChild(img);
 		contenedor.appendChild(div);
 	}
+};
+
+export const mostrarImagenCarta = (
+	elemento: HTMLDivElement,
+	idCarta: number
+): void => {
+	const img = elemento.querySelector("img");
+	if (img && img instanceof HTMLImageElement) {
+		img.src = tablero.cartas[idCarta].imagen;
+		elemento.classList.add("is-selected");
+	}
+};
+
+export const ocultarCartasErroneas = (div: HTMLDivElement): void => {
+	const elementos = div.childNodes;
+	elementos.forEach((elemento, index) => {
+		if (elemento instanceof HTMLDivElement) {
+			if (
+				index === tablero.indiceCartaVolteadaA ||
+				index === tablero.indiceCartaVolteadaB
+			) {
+				const img = elemento.querySelector("img");
+				if (img && img instanceof HTMLImageElement) {
+					img.src = "";
+					elemento.classList.remove("is-selected");
+				}
+			}
+		}
+	});
 };
