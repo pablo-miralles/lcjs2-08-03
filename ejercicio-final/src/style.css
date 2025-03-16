@@ -104,6 +104,10 @@ button:focus-visible {
   transition: all 0.6s;
 }
 
+.cards__item:hover {
+  background-color: #b7d3ea;
+}
+
 .cards__item.is-selected {
   transform: rotateY(180deg);
 }
